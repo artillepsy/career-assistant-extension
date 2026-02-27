@@ -1,0 +1,54 @@
+# IDE / OS Specific
+.vs/
+.vscode/
+*.user
+*.userosscache
+*.sln.doccache
+.DS_Store
+Thumbs.db
+
+# ASP.NET Core (C# / .NET)
+bin/
+obj/
+appsettings.Development.json
+appsettings.Local.json
+*.suo
+*.user
+*.sln.ids
+*.db
+*.db-journal
+
+# Angular (Node / TypeScript)
+node_modules/
+dist/
+.angular/
+.cache/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env
+src/environments/environment.prod.ts
+
+# Terraform
+# Local .terraform folder containing modules and plugins
+.terraform/
+
+# Terraform state files
+*.tfstate
+*.tfstate.backup
+*.tfstate.lock.info
+
+# Terraform variables (often contain secrets)
+*.tfvars
+*.tfvars.json
+
+# Terraform crash logs
+crash.log
+
+# Terraform CLI configuration
+.terraformrc
+terraform.rc
+
+# Misc
+*.log
+.idea/
