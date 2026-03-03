@@ -1,3 +1,4 @@
+using Api.Controllers;
 using Api.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
@@ -12,6 +13,8 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.SetupSwaggerBehaviour();
+
+builder.Services.AddScoped<IGeminiConfigProvider, GeminiConfigProvider>();
 
 var app = builder.Build();
 
