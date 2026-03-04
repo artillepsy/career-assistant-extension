@@ -1,7 +1,45 @@
-﻿services:
+﻿version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    environment:
+      - POSTGRES_DB=app_db
+      - POSTGRES_USER=app_admin
+      - POSTGRES_PASSWORD=securepassword
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app_admin -d app_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - api-network
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
   api:
-    image: api
     build:
       context: .
-      dockerfile: Api/Dockerfile
+      dockerfile: ./Api/Dockerfile
+    container_name: api
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=app_db;Username=app_admin;Password=securepassword
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - api-network
+    restart: unless-stopped
 
+networks:
+  api-network:
+    driver: bridge
+
+volumes:
+  db-data:
