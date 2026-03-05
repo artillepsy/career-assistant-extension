@@ -13,6 +13,6 @@ RUN dotnet publish "Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAp
 FROM public.ecr.aws/lambda/dotnet:10 AS final
 WORKDIR /var/task
 
-COPY --from=publish /app/publish .
+COPY --from=build /app/publish .
 
 CMD [ "Api" ]
