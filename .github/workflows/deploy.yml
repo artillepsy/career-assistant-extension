@@ -174,11 +174,10 @@ jobs:
           docker buildx build \
             --platform linux/arm64 \
             --provenance=false \
-            -t $API_IMAGE_URI ./Api --push
+            -f ./Api/Dockerfile \
+            -t $API_IMAGE_URI . --push
           echo "image=$API_IMAGE_URI" >> $GITHUB_OUTPUT
           
-  
-
   deploy-infrastructure:
     runs-on: ubuntu-latest
     needs: push-images-to-ecr
