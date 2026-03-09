@@ -4,7 +4,7 @@ import { defineConfig } from 'wxt';
 export default defineConfig({
   modules: ['@wxt-dev/module-react'],
   manifest: {
-    permissions: ['sidePanel', 'sidebarAction'],
+    permissions: ['sidePanel', 'sidebarAction', 'menus', 'activeTab'],
     action: {
       /*default_popup: 'entrypoints/popup/index.html',*/
       default_title: 'Click to open sidebar',
