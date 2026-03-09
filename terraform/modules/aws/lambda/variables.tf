@@ -33,7 +33,7 @@ variable "vpc_security_group_ids" {
 }
 
 variable "gemini_api_key" {
-  type: string
-  sensitive: true
+  type = string
+  sensitive = true
 }
 

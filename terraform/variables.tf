@@ -29,6 +29,6 @@ variable "db_password" {
 }
 
 variable "gemini_api_key" {
-  type: string
-  sensitive: true
+  type = string
+  sensitive = true
 }
