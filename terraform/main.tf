@@ -75,6 +75,7 @@ module "api_lambda" {
   db_url      = "jdbc:postgresql://${module.rds.db_endpoint}/${var.db_name}"
   db_username = var.db_username
   db_password = var.db_password
+  gemini_api_key = var.gemini_api_key
 
   # Pass the networking IDs to Lambda
   vpc_subnet_ids     = data.aws_subnets.default.ids
