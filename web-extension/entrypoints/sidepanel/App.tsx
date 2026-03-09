@@ -9,14 +9,15 @@ function App() {
   const [activePageName, setActivePageName] = useState('Main');
 
   interface PageData {
+    id: number;
     name: string;
     page: JSX.Element;
   }
 
   const pageDataList: PageData[] = [
-    { name: 'Main', page: <MainPage /> },
-    { name: 'Current Job', page: <CurrentJobPage /> },
-    { name: 'Settings', page: <SettingsPage /> },
+    { id: 1, name: 'Main', page: <MainPage /> },
+    { id: 2, name: 'Current Job', page: <CurrentJobPage /> },
+    { id: 3, name: 'Settings', page: <SettingsPage /> },
   ];
 
   const getActivePage = () => {
@@ -35,7 +36,12 @@ function App() {
     <>
       <div className="tabs">
         {pageDataList.map((pageData) => (
-          <PageTab name={pageData.name} isActive={activePageName === pageData.name} onSelect={setActivePageName} />
+          <PageTab
+            key={pageData.id}
+            name={pageData.name}
+            isActive={activePageName === pageData.name}
+            onSelect={setActivePageName}
+          />
         ))}
       </div>
       <div className="mainPage">{getActivePage()}</div>
