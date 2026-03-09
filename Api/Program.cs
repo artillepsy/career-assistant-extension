@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
 
@@ -16,6 +15,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.SetupSwaggerBehaviour();
 
 builder.Services.AddScoped<IGeminiConfigProvider, GeminiConfigProvider>();
+
+builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
+
 
 var app = builder.Build();
 
@@ -33,5 +35,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGet("test", () => "test");
 
 app.Run();
