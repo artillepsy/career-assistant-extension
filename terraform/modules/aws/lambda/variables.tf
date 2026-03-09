@@ -32,3 +32,8 @@ variable "vpc_security_group_ids" {
   type        = list(string)
 }
 
+variable "gemini_api_key" {
+  type: string
+  sensitive: true
+}
+

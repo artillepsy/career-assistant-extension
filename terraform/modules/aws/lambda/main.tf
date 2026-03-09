@@ -16,6 +16,8 @@ resource "aws_lambda_function" "this" {
       DB_URL      = var.db_url
       DB_USERNAME = var.db_username
       DB_PASSWORD = var.db_password
+      
+      GEMINI_API_KEY = var.gemini_api_key
     }
   }
 
