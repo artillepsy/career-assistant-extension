@@ -1,38 +1,46 @@
-import {useState} from 'react';
-import reactLogo from '@/assets/react.svg';
-import wxtLogo from '/wxt.svg';
+import { JSX, useState } from 'react';
 import './App.css';
+import { PageTab } from '@/entrypoints/sidepanel/src/components/Tab/PageTab.tsx';
+import { MainPage } from '@/entrypoints/sidepanel/src/components/pages/MainPage/MainPage.tsx';
+import { CurrentJobPage } from '@/entrypoints/sidepanel/src/components/pages/CurrentJobPage/CurrentJobPage.tsx';
+import { SettingsPage } from '@/entrypoints/sidepanel/src/components/pages/SettingsPage/SettingsPage.tsx';
 
 function App() {
-    const [count, setCount] = useState(0);
+  const [activePageName, setActivePageName] = useState('Main');
 
-    return (
-        <>
-            <div>
+  interface PageData {
+    name: string;
+    page: JSX.Element;
+  }
 
-            </div>
-            <div>
-                <a href="https://wxt.dev" target="_blank">
-                    <img src={wxtLogo} className="logo" alt="WXT logo"/>
-                </a>
-                <a href="https://react.dev" target="_blank">
-                    <img src={reactLogo} className="logo react" alt="React logo"/>
-                </a>
-            </div>
-            <h1>WXT + React</h1>
-            <div className="card">
-                <button onClick={() => setCount((count) => count + 1)}>
-                    count is {count}, huh?!
-                </button>
-                <p>
-                    Edit <code>src/App.tsx</code> and save to test HMR
-                </p>
-            </div>
-            <p className="read-the-docs">
-                Click on the WXT and React logos to learn more
-            </p>
-        </>
-    );
+  const pageDataList: PageData[] = [
+    { name: 'Main', page: <MainPage /> },
+    { name: 'Current Job', page: <CurrentJobPage /> },
+    { name: 'Settings', page: <SettingsPage /> },
+  ];
+
+  const getActivePage = () => {
+    let elem = pageDataList.find((data) => {
+      return data.name === activePageName;
+    });
+
+    if (elem == null) {
+      throw new Error(`Can't find active page with name ${activePageName}`);
+    }
+
+    return elem?.page;
+  };
+
+  return (
+    <>
+      <div className="tabs">
+        {pageDataList.map((pageData) => (
+          <PageTab name={pageData.name} isActive={activePageName === pageData.name} onSelect={setActivePageName} />
+        ))}
+      </div>
+      <div className="mainPage">{getActivePage()}</div>
+    </>
+  );
 }
 
 export default App;
