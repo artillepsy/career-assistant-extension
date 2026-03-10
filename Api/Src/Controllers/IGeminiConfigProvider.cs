@@ -7,4 +7,5 @@ public interface IGeminiConfigProvider
 	public GenerateContentConfig Config { get; }
 	public string ApiKey { get; }
 	public string Model { get; }
+	public string PromptStart { get; }
 }

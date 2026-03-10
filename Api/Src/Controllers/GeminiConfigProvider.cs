@@ -1,4 +1,5 @@
 using Google.GenAI.Types;
+using Type = Google.GenAI.Types.Type;
 
 namespace Api.Controllers;
 
@@ -7,6 +8,7 @@ public class GeminiConfigProvider : IGeminiConfigProvider
 	public GenerateContentConfig Config { get; }
 	public string ApiKey { get; }
 	public string Model { get; }
+	public string PromptStart { get; }
 	
 	public GeminiConfigProvider(IConfiguration configuration)
 	{
@@ -31,9 +33,26 @@ public class GeminiConfigProvider : IGeminiConfigProvider
 			MaxOutputTokens = configSection.GetValue<int>("MaxOutputTokens"),
 			CandidateCount = configSection.GetValue<int>("CandidateCount"),
 			Tools = tools,
+			ResponseMimeType = "application/json",
+			ResponseSchema = new Schema()
+			{
+				Type = Type.Object,
+				Properties = new Dictionary<string, Schema>()
+				{
+					["jobTitle"] = new Schema() {Type = Type.String},
+					["company"] = new Schema() {Type = Type.String},
+					["requiredSkills"] = new Schema()
+					{
+						Type = Type.Array,
+						Items = new Schema() {Type = Type.String}
+					},
+				},
+				Required = ["jobTitle", "company", "requiredSkills"]
+			}
 		};
 		
 		ApiKey = configuration["GEMINI_API_KEY"] ?? throw new ArgumentNullException();
 		Model = configuration["Gemini:Model"] ?? throw new ArgumentNullException();
+		PromptStart = configuration["Gemini:PromptStart"] ?? throw new ArgumentNullException();
 	}
 }

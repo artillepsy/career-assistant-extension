@@ -15,7 +15,7 @@ public class PromptsController : ControllerBase
 	
 	public class PromptDto
 	{
-		public string Prompt { get; set; } = string.Empty;
+		public string PageText { get; set; } = string.Empty;
 	}
 
 	public PromptsController(IGeminiConfigProvider geminiProvider, ILogger<PromptsController> logger)
@@ -27,12 +27,14 @@ public class PromptsController : ControllerBase
 	[HttpPost("generate")]
 	public async Task<ActionResult<string>> Generate([FromBody] PromptDto dto)
 	{
+		var prompt = _geminiProvider.PromptStart + dto.PageText;
+		
 		var startTime = DateTime.Now;
 		
 		var client = new Client(apiKey: _geminiProvider.ApiKey);
 		var response = await client.Models.GenerateContentAsync(
 			model: _geminiProvider.Model,
-			contents: dto.Prompt, 
+			contents: prompt, 
 			config: _geminiProvider.Config);
 		
 		var timeTaken = DateTime.Now - startTime;
@@ -43,6 +45,7 @@ public class PromptsController : ControllerBase
 		return 
 			$"Time taken: {timeTaken.TotalSeconds} s.\n" +
 		       $"Characters: {responseText.Length}.\n" +
+		       $"AI Model: {_geminiProvider.Model}.\n" +
 		       $"Response: {responseText}";
 	}
 }
