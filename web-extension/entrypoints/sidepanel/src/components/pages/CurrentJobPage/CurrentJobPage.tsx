@@ -5,6 +5,7 @@ export function CurrentJobPage() {
     const fetchData = async () => {
       await browser.storage.local.get('jobAnalysis').then((result) => {
         if (result.jobAnalysis) {
+          // @ts-ignore
           setAnalysisResult(result.jobAnalysis ?? 'failed to get the key');
         }
       });
