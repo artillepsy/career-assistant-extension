@@ -19,6 +19,8 @@ export default defineBackground(() => {
         return;
       }
 
+      browser.sidePanel.open({ windowId: tab.windowId });
+
       const results = await browser.scripting.executeScript({
         target: { tabId: tab.id },
         func: () => {
@@ -26,9 +28,11 @@ export default defineBackground(() => {
         },
       });
 
-      const html = results[0].result;
+      const analysis = results[0].result?.substring(0, 10000);
 
-      console.log(`page content: ${html?.substring(0, 10000)}`);
+      //console.log(`page content: ${analysis}`);
+
+      browser.storage.local.set({ jobAnalysis: analysis });
     }
   });
 });
