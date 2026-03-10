@@ -10,29 +10,25 @@ export default defineBackground(() => {
     contexts: ['page'],
   });
 
-  /*browser.contextMenus.create({
-    id: 'open-panel',
-    title: 'Open side panel',
-    contexts: ['all'],
-  });*/
-
-  browser.contextMenus.onClicked.addListener((info, tab) => {
+  browser.contextMenus.onClicked.addListener(async (info, tab) => {
     if (info.menuItemId === 'analyze-job') {
-      /*console.log(`page is selected, url: ${info.pageUrl}`);
+      console.log(`page is selected, url: ${info.pageUrl}, tab: ${tab}, openerTabId: ${tab?.openerTabId}`);
 
-      const results = browser.scripting.executeScript({
-        target: { tabId: tab.tabId },
+      if (!tab || !tab.id) {
+        console.log('Tab is not selected');
+        return;
+      }
+
+      const results = await browser.scripting.executeScript({
+        target: { tabId: tab.id },
         func: () => {
-          const bodyText = document.body.innerText;
-          const html = document.documentElement.innerHTML;
-          return { bodyText, html };
+          return document.body.innerText;
         },
       });
 
-      const pageData = results[0].result;
-      console.log(`page content: ${pageData.bodyText.substring(0, 100)}`);*/
-    } else if (info.menuItemId === 'open-panel') {
-      browser.sidePanel.open({ windowId: tab.windowId });
+      const html = results[0].result;
+
+      console.log(`page content: ${html?.substring(0, 10000)}`);
     }
   });
 });
