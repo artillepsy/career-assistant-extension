@@ -28,11 +28,28 @@ export default defineBackground(() => {
         },
       });
 
-      const analysis = results[0].result?.substring(0, 10000);
+      const pagePlainText = results[0].result?.substring(0, 10000);
 
-      //console.log(`page content: ${analysis}`);
+      const url = import.meta.env.WXT_LAMBDA_ENDPOINT;
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          body: JSON.stringify({ pageText: pagePlainText }),
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+        });
 
-      browser.storage.local.set({ jobAnalysis: analysis });
+        if (!response.ok) {
+          // noinspection ExceptionCaughtLocallyJS
+          throw new Error(`Error response. Status: ${response.status}`);
+        }
+
+        browser.storage.local.set({ jobAnalysis: response.json() });
+      } catch (e) {
+        console.error(e);
+      }
     }
   });
 });
