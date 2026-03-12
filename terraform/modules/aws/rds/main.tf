@@ -9,7 +9,8 @@ resource "aws_db_instance" "postgres" {
   username             = var.db_username
   password             = var.db_password
 
-  publicly_accessible  = true
+  #todo: set to 'true' when ready to work with DB 
+  publicly_accessible  = false
   iam_database_authentication_enabled = true
   skip_final_snapshot  = true  # Required to destroy without errors
   multi_az             = false # Multi-AZ is NOT free
