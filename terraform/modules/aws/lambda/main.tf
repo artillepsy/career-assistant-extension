@@ -20,11 +20,6 @@ resource "aws_lambda_function" "this" {
       GEMINI_API_KEY = var.gemini_api_key
     }
   }
-
-  vpc_config {
-    subnet_ids         = var.vpc_subnet_ids
-    security_group_ids = var.vpc_security_group_ids
-  }
 }
 
 resource "aws_lambda_alias" "live" {

@@ -25,13 +25,6 @@ variable "db_password" {
   sensitive   = true
 }
 
-variable "vpc_subnet_ids" {
-  type        = list(string)
-}
-variable "vpc_security_group_ids" {
-  type        = list(string)
-}
-
 variable "gemini_api_key" {
   type = string
   sensitive = true
