@@ -28,7 +28,7 @@ public class PromptsController : ControllerBase
 	}
 	
 	[HttpPost("generate")]
-	public async Task<ActionResult<string>> Generate([FromBody] PromptDto dto)
+	public async Task<ActionResult> Generate([FromBody] PromptDto dto)
 	{
 		if (string.IsNullOrEmpty(dto.PageText))
 		{
