@@ -31,22 +31,32 @@ export default defineBackground(() => {
       const pagePlainText = results[0].result?.substring(0, 10000);
 
       const url = import.meta.env.WXT_LAMBDA_ENDPOINT;
+
       try {
-        const response = await fetch(url, {
+        const request = {
           method: 'POST',
           body: JSON.stringify({ pageText: pagePlainText }),
           headers: {
             'Content-Type': 'application/json',
-            Accept: 'application/json',
+            Accept: 'text/plain',
           },
-        });
+        };
+
+        //console.log(`request is formed but not sent. Body: ${request.body}`);
+        const response = await fetch(url, request);
+
+        //const url = import.meta.env.WXT_LAMBDA_TEST_ENDPOINT;
+        //const response = await fetch(url);
+
+        console.log(`response status: ${response.status}`);
 
         if (!response.ok) {
           // noinspection ExceptionCaughtLocallyJS
-          throw new Error(`Error response. Status: ${response.status}`);
+          throw new Error(`Error response.\nStatus: ${response.status}, \nRequest body: ${request.body}`);
         }
 
-        browser.storage.local.set({ jobAnalysis: response.json() });
+        // todo: parse into json. Right now it's displayed as plain text.
+        browser.storage.local.set({ jobAnalysis: await response.text() });
       } catch (e) {
         console.error(e);
       }
