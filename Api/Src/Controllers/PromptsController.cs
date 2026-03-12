@@ -58,4 +58,37 @@ public class PromptsController : ControllerBase
 			response = JsonDocument.Parse(jsonResponse)
 		});
 	}
+
+	[HttpPost("generate-test-async")]
+	public async Task<ActionResult<string>> GenerateTestAsync([FromBody] PromptDto dto)
+	{
+		var startTime = DateTime.Now;
+		
+		var client = new HttpClient();
+
+		var testResponse = await client.GetAsync("https://currencyrateapi.com/api/codes");
+		var responseText = await testResponse.Content.ReadAsStringAsync();
+		
+		var timeTaken = DateTime.Now - startTime;
+		
+		return Ok(new
+		{
+			timeTaken,
+			characters = responseText.Length,
+			aiModel = _geminiProvider.Model,
+			response = responseText
+		});
+	}
+	
+	[HttpPost("generate-test-sync")]
+	public ActionResult<string> GenerateTestSync([FromBody] PromptDto dto)
+	{
+		return Ok(new
+		{
+			timeTaken = 0,
+			characters = 0,
+			aiModel = _geminiProvider.Model,
+			response = ""
+		});
+	}
 }
