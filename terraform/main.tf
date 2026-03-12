@@ -28,7 +28,7 @@ module "rds" {
   db_password  = var.db_password
 
   # No VPC to make Lambda talk to external APIs directly
-  publicly_accessible               = true
+  publicly_accessible               = false
   iam_database_authentication_enabled = true
 }
 
