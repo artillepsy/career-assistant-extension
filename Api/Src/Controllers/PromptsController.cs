@@ -1,6 +1,8 @@
+using System.Text.Json;
 using Google.GenAI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Api.Controllers;
 
@@ -15,6 +17,7 @@ public class PromptsController : ControllerBase
 	
 	public class PromptDto
 	{
+		[JsonProperty("pageText")]
 		public string PageText { get; set; } = string.Empty;
 	}
 
@@ -27,6 +30,11 @@ public class PromptsController : ControllerBase
 	[HttpPost("generate")]
 	public async Task<ActionResult<string>> Generate([FromBody] PromptDto dto)
 	{
+		if (string.IsNullOrEmpty(dto.PageText))
+		{
+			return BadRequest("Property [PageText] is empty");
+		}
+		
 		var prompt = _geminiProvider.PromptStart + dto.PageText;
 		
 		var startTime = DateTime.Now;
@@ -39,13 +47,15 @@ public class PromptsController : ControllerBase
 		
 		var timeTaken = DateTime.Now - startTime;
 
-		var responseText = response.Candidates[0].Content.Parts[0].Text;
-
-		_logger.LogInformation(responseText);
-		return 
-			$"Time taken: {timeTaken.TotalSeconds} s.\n" +
-		       $"Characters: {responseText.Length}.\n" +
-		       $"AI Model: {_geminiProvider.Model}.\n" +
-		       $"Response: {responseText}";
+		var jsonResponse = response.Candidates[0].Content.Parts[0].Text;
+		
+		_logger.LogInformation(jsonResponse);
+		return Ok(new
+		{
+			timeTaken = timeTaken.TotalSeconds,
+			characters =  jsonResponse.Length,
+			aiModel = _geminiProvider.Model,
+			response = JsonDocument.Parse(jsonResponse)
+		});
 	}
 }
