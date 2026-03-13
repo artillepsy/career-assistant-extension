@@ -1,4 +1,5 @@
 using Google.GenAI.Types;
+using File = System.IO.File;
 using Type = Google.GenAI.Types.Type;
 
 namespace Api.Controllers;
@@ -23,6 +24,13 @@ public class GeminiConfigProvider : IGeminiConfigProvider
 			tools.Add(new Tool {GoogleSearch = new GoogleSearch()});
 		}
 		
+		var promptFilePath = configuration["Gemini:PromptPath"] ?? throw new ArgumentNullException();
+		PromptStart = File.ReadAllText(promptFilePath);
+		ApiKey = configuration["GEMINI_API_KEY"] ?? throw new ArgumentNullException();
+		Model = configuration["Gemini:Model"] ?? throw new ArgumentNullException();
+		
+		Console.WriteLine($"Prompt start: {PromptStart}");
+		
 		Config = new GenerateContentConfig
 		{
 			SystemInstruction = new Content
@@ -34,6 +42,7 @@ public class GeminiConfigProvider : IGeminiConfigProvider
 			CandidateCount = configSection.GetValue<int>("CandidateCount"),
 			Tools = tools,
 			ResponseMimeType = "application/json",
+			
 			ResponseSchema = new Schema()
 			{
 				Type = Type.Object,
@@ -41,18 +50,21 @@ public class GeminiConfigProvider : IGeminiConfigProvider
 				{
 					["jobTitle"] = new Schema() {Type = Type.String},
 					["company"] = new Schema() {Type = Type.String},
+					["predictedSalary"] = new Schema() {Type = Type.String},
 					["requiredSkills"] = new Schema()
 					{
 						Type = Type.Array,
 						Items = new Schema() {Type = Type.String}
 					},
+					["redFlags"] = new Schema()
+					{
+						Type = Type.Array,
+						Items = new Schema() {Type = Type.String}
+					},
+					["coverLetter"] = new Schema() {Type = Type.String},
 				},
-				Required = ["jobTitle", "company", "requiredSkills"]
+				Required = ["jobTitle", "company", "requiredSkills", "coverLetter"]
 			}
 		};
-		
-		ApiKey = configuration["GEMINI_API_KEY"] ?? throw new ArgumentNullException();
-		Model = configuration["Gemini:Model"] ?? throw new ArgumentNullException();
-		PromptStart = configuration["Gemini:PromptStart"] ?? throw new ArgumentNullException();
 	}
 }

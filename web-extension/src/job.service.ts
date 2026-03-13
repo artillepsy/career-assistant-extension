@@ -1,6 +1,7 @@
 import { JobData } from '@/src/data/job.data.ts';
 
 export class JobService {
+  //todo: add cv for cover letter, match score, skill gap and so on
   public async analyzeJob(
     pageUrl: string | undefined,
     pageText: string | undefined,
