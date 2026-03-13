@@ -24,8 +24,15 @@ public class GeminiConfigProvider : IGeminiConfigProvider
 			tools.Add(new Tool {GoogleSearch = new GoogleSearch()});
 		}
 		
-		var promptFilePath = configuration["Gemini:PromptPath"] ?? throw new ArgumentNullException();
-		PromptStart = File.ReadAllText(promptFilePath);
+		var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+		var filePath = Path.Combine(baseDir, "prompt.txt");
+
+		if (!File.Exists(filePath))
+		{
+			throw new FileNotFoundException($"Prompt file missing at: {filePath}");
+		}
+		
+		PromptStart = File.ReadAllText(filePath);
 		ApiKey = configuration["GEMINI_API_KEY"] ?? throw new ArgumentNullException();
 		Model = configuration["Gemini:Model"] ?? throw new ArgumentNullException();
 		

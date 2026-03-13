@@ -14,6 +14,9 @@
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.3" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.4" />
+        <None Update="prompt.txt">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
