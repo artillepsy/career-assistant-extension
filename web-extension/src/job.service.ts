@@ -1,4 +1,5 @@
 import { JobData } from '@/src/data/job.data.ts';
+import { ApiJobResponseData } from '@/src/data/api-job-response.data.ts';
 
 export class JobService {
   //todo: add cv for cover letter, match score, skill gap and so on
@@ -13,6 +14,7 @@ export class JobService {
       company: '',
       error: undefined,
       predictedSalary: undefined,
+      predictConfidence: undefined,
       coverLetter: undefined,
       matchScore: undefined,
       keySkills: [],
@@ -47,7 +49,7 @@ export class JobService {
         throw new Error(`Error response.\nStatus: ${response.status}, \nRequest body: ${request.body}`);
       }
 
-      jobResponse = JSON.parse(await response.text()) as JobData;
+      jobResponse = (JSON.parse(await response.text()) as ApiJobResponseData).response;
     } catch (e) {
       console.error(e);
       jobResponse.error = String(e);

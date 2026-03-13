@@ -5,18 +5,18 @@ import { JobListPage } from '@/entrypoints/sidepanel/Src/Pages/JobList/JobListPa
 import { SelectedJobPage } from '@/entrypoints/sidepanel/Src/Pages/SelectedJob/SelectedJobPage.tsx';
 
 function App() {
-  const [activePageName, setActivePageName] = useState('Main');
+  const pageDataList: PageData[] = [
+    { id: 1, name: 'List', page: <JobListPage /> },
+    { id: 2, name: 'Selected', page: <SelectedJobPage /> },
+  ];
+
+  const [activePageName, setActivePageName] = useState(pageDataList[0].name);
 
   interface PageData {
     id: number;
     name: string;
     page: JSX.Element;
   }
-
-  const pageDataList: PageData[] = [
-    { id: 1, name: 'List', page: <JobListPage /> },
-    { id: 2, name: 'Selected', page: <SelectedJobPage /> },
-  ];
 
   const getActivePage = () => {
     let elem = pageDataList.find((data) => {
