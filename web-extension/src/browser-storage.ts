@@ -1,4 +1,4 @@
-import { JobData } from '@/src/data/job.data.ts';
+import { JobData } from '@/src/data/job-data.ts';
 
 export class BrowserStorage {
   public async saveJob(job: JobData | undefined, isSelected: boolean): Promise<void> {

@@ -1,4 +1,4 @@
-import { JobData } from '@/src/data/job.data.ts';
+import { JobData } from '@/src/data/job-data.ts';
 
 export function SelectedJobPage() {
   const [job, setJob] = useState<JobData>();
@@ -12,9 +12,20 @@ export function SelectedJobPage() {
         }
       });
     };
-    //todo: listen to the storage changes
+
+    const handleStorageChange = (changes: Record<string, any>, areaName: string) => {
+      if (areaName === 'local' && changes['selectedJob']) {
+        fetchData();
+      }
+    };
+
+    browser.storage.onChanged.addListener(handleStorageChange);
 
     fetchData();
+
+    return () => {
+      browser.storage.onChanged.removeListener(handleStorageChange);
+    };
   }, []);
 
   if (!job) {
@@ -28,37 +39,45 @@ export function SelectedJobPage() {
   return (
     <>
       <a>{job.url}</a>
-      <h1>{job.jobTitle}</h1>
-      <h2>At {job.company}</h2>
+      <h2>{job.jobTitle}</h2>
+      <p>At {job.company}</p>
+      <br />
 
       {job.predictedSalary && (
         <>
-          <h1>Predicted salary</h1>
+          <h3>Predicted salary</h3>
           <p>{job.predictedSalary}</p>
         </>
       )}
+      <br />
 
-      {job.requiredSkills && (
+      {job.requiredSkills && job.requiredSkills.length > 0 && (
         <>
-          <h1>Key Skills</h1>
-          {job.requiredSkills.map((skill, index) => {
-            <p key={index}>{skill}</p>;
-          })}
+          <h3>Key Skills: {job.requiredSkills.length}</h3>
+          {job.requiredSkills.map((skill, index) => (
+            <p key={index}>
+              {index + 1}. {skill}
+            </p>
+          ))}
         </>
       )}
+      <br />
 
-      {job.redFlags && (
+      {job.redFlags && job.redFlags.length > 0 && (
         <>
-          <h1>Red Flags</h1>
-          {job.redFlags.map((flag, index) => {
-            <p key={index}>{flag}</p>;
-          })}
+          <h3>Red Flags: {job.redFlags.length}</h3>
+          {job.redFlags.map((flag, index) => (
+            <p key={index}>
+              {index + 1}. {flag}
+            </p>
+          ))}
         </>
       )}
+      <br />
 
       {job.coverLetter && (
         <>
-          <h1>Cover Letter</h1>
+          <h3>Cover Letter</h3>
           <p>{job.coverLetter}</p>
         </>
       )}

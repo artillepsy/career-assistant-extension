@@ -40,8 +40,11 @@ export class ExtensionService {
       return;
     }
 
-    const jobData = await this.jobService.analyzeJob(info.pageUrl, pagePlainText);
-
-    await this.storage.saveJob(jobData, true);
+    try {
+      const apiJobResponse = await this.jobService.analyzeJob(info.pageUrl, pagePlainText);
+      await this.storage.saveJob(apiJobResponse.response, true);
+    } catch (e) {
+      console.error(e);
+    }
   }
 }

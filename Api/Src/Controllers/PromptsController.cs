@@ -52,6 +52,7 @@ public class PromptsController : ControllerBase
 		var jsonResponse = response.Candidates[0].Content.Parts[0].Text;
 		
 		_logger.LogInformation(jsonResponse);
+		
 		return Ok(new
 		{
 			timeTaken = timeTaken.TotalSeconds,
