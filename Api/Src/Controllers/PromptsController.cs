@@ -19,6 +19,8 @@ public class PromptsController : ControllerBase
 	{
 		[JsonProperty("pageText")]
 		public string PageText { get; set; } = string.Empty;
+		[JsonProperty("cv")]
+		public string Cv { get; set; } = string.Empty;
 	}
 
 	public PromptsController(IGeminiConfigProvider geminiProvider, ILogger<PromptsController> logger)
