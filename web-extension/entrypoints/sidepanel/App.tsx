@@ -1,9 +1,8 @@
 import { JSX, useState } from 'react';
 import './App.css';
-import { PageTab } from '@/entrypoints/sidepanel/src/components/Tab/PageTab.tsx';
-import { MainPage } from '@/entrypoints/sidepanel/src/components/pages/MainPage/MainPage.tsx';
-import { CurrentJobPage } from '@/entrypoints/sidepanel/src/components/pages/CurrentJobPage/CurrentJobPage.tsx';
-import { SettingsPage } from '@/entrypoints/sidepanel/src/components/pages/SettingsPage/SettingsPage.tsx';
+import { PageTab } from '@/entrypoints/sidepanel/Src/Tab/PageTab.tsx';
+import { JobListPage } from '@/entrypoints/sidepanel/Src/Pages/JobList/JobListPage.tsx';
+import { SelectedJobPage } from '@/entrypoints/sidepanel/Src/Pages/SelectedJob/SelectedJobPage.tsx';
 
 function App() {
   const [activePageName, setActivePageName] = useState('Main');
@@ -15,9 +14,8 @@ function App() {
   }
 
   const pageDataList: PageData[] = [
-    { id: 1, name: 'Main', page: <MainPage /> },
-    { id: 2, name: 'Current Job', page: <CurrentJobPage /> },
-    { id: 3, name: 'Settings', page: <SettingsPage /> },
+    { id: 1, name: 'List', page: <JobListPage /> },
+    { id: 2, name: 'Selected', page: <SelectedJobPage /> },
   ];
 
   const getActivePage = () => {

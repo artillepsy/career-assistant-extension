@@ -4,7 +4,7 @@ import { defineConfig } from 'wxt';
 export default defineConfig({
   modules: ['@wxt-dev/module-react'],
   manifest: {
-    permissions: ['sidePanel', 'contextMenus', 'activeTab', 'scripting', 'storage'],
+    permissions: ['sidePanel', 'contextMenus', 'activeTab', 'scripting', 'storage', 'unlimitedStorage'],
     host_permissions: ['<all_urls>'],
     action: {
       /*default_popup: 'entrypoints/popup/index.html',*/
