@@ -11,8 +11,7 @@ export class BrowserStorage {
     const jobList = result.jobList as JobData[];
 
     jobList.push(job);
-
-    await browser.storage.local.set(jobList);
+    await browser.storage.local.set({ jobList });
     console.log(`saved job: ${job}. item count in storage: ${jobList.length}`);
 
     if (isSelected) {

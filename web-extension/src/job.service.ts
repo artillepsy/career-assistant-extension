@@ -9,15 +9,15 @@ export class JobService {
     cv: string = '',
   ): Promise<JobData> {
     let jobResponse: JobData = {
-      url: '',
-      title: '',
+      url: pageUrl,
+      jobTitle: '',
       company: '',
       error: undefined,
       predictedSalary: undefined,
       predictConfidence: undefined,
       coverLetter: undefined,
       matchScore: undefined,
-      keySkills: [],
+      requiredSkills: [],
       redFlags: [],
     };
 

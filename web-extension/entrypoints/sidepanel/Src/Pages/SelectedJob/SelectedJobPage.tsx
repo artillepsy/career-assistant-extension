@@ -6,9 +6,9 @@ export function SelectedJobPage() {
   useEffect(() => {
     const fetchData = async () => {
       await browser.storage.local.get('selectedJob').then((result) => {
-        if (result.jobAnalysis) {
+        if (result.selectedJob) {
           // @ts-ignore
-          setJob(result.jobAnalysis ?? 'failed to get the key');
+          setJob(result.selectedJob ?? 'failed to get the key');
         }
       });
     };
@@ -28,7 +28,7 @@ export function SelectedJobPage() {
   return (
     <>
       <a>{job.url}</a>
-      <h1>{job.title}</h1>
+      <h1>{job.jobTitle}</h1>
       <h2>At {job.company}</h2>
 
       {job.predictedSalary && (
@@ -38,10 +38,10 @@ export function SelectedJobPage() {
         </>
       )}
 
-      {job.keySkills && (
+      {job.requiredSkills && (
         <>
           <h1>Key Skills</h1>
-          {job.keySkills.map((skill, index) => {
+          {job.requiredSkills.map((skill, index) => {
             <p key={index}>{skill}</p>;
           })}
         </>
