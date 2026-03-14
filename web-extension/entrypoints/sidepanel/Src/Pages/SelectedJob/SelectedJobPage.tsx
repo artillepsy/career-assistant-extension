@@ -23,7 +23,7 @@ export function SelectedJobPage() {
     return () => {
       browser.storage.onChanged.removeListener(handleStorageChange);
     };
-  }, []);
+  }, [jobStorage]);
 
   if (!job) {
     return <h3>Waiting for data...</h3>;

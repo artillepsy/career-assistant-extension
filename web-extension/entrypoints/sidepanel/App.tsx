@@ -14,12 +14,13 @@ export interface PageData {
 export const pages: PageData[] = [
   { id: 1, name: 'List', comp: <JobListPage /> },
   { id: 2, name: 'Selected', comp: <SelectedJobPage /> },
+  /* { id: 3, name: 'CV', comp: <SelectedJobPage /> },*/
 ];
 
 export const JobStorageContext = createContext<JobStorage | null>(null);
 
 function App() {
-  const [activePageName, setActivePageName] = useState(pages[0].name);
+  const [activePageName, setActivePageName] = useState(pages[1].name);
   const [jobStorage] = useState(() => new JobStorage());
 
   const getActivePage = () => {

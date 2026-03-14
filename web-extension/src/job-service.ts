@@ -1,8 +1,8 @@
-import { ApiJobResponse } from '@/src/data/api-job-response.ts';
+import { JobResponse } from '@/src/data/job-response.ts';
 
 export class JobService {
   //todo: add cv for cover letter, match score, skill gap and so on
-  public async analyzeJob(pageUrl: string, pageText: string, cv: string = ''): Promise<ApiJobResponse> {
+  public async analyzeJob(pageUrl: string, pageText: string, cv: string = ''): Promise<JobResponse> {
     if (!pageUrl || !pageText) {
       throw new Error(`Error. Either url or pageText is empty.`);
     }
@@ -25,12 +25,14 @@ export class JobService {
     console.log(`response status: ${response.status}`);
 
     if (!response.ok) {
-      throw new Error(`Error response.\nStatus: ${response.status}, \nRequest body: ${request.body}`);
+      throw new Error(
+        `Error response.\nStatus: ${response.status}, message: ${response.statusText} \nRequest body: ${request.body}`,
+      );
     }
 
-    let responseDto = JSON.parse(await response.text()) as ApiJobResponse;
+    let responseDto = JSON.parse(await response.text()) as JobResponse;
     responseDto.response.url = pageUrl;
-    responseDto.response.createdAt = new Date();
+    responseDto.response.createdAt = new Date().toLocaleTimeString();
     return responseDto;
   }
 }

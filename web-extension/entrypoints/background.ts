@@ -1,5 +1,5 @@
-import { ExtensionService } from '@/src/extension.service.ts';
-import { JobService } from '@/src/job.service.ts';
+import { ExtensionService } from '@/src/extension-service.ts';
+import { JobService } from '@/src/job-service.ts';
 import { JobStorage } from '@/src/job-storage.ts';
 
 export default defineBackground(() => {

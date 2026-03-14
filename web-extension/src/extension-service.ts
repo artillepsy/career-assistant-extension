@@ -1,7 +1,7 @@
 import { Browser } from '@wxt-dev/browser';
 import OnClickData = Browser.contextMenus.OnClickData;
 import Tab = Browser.tabs.Tab;
-import { JobService } from '@/src/job.service.ts';
+import { JobService } from '@/src/job-service.ts';
 import { JobStorage } from '@/src/job-storage.ts';
 
 export class ExtensionService {
@@ -44,6 +44,7 @@ export class ExtensionService {
       const apiJobResponse = await this.jobService.analyzeJob(info.pageUrl, pagePlainText);
       await this.storage.saveJob(apiJobResponse.response, true);
     } catch (e) {
+      alert(String(e));
       console.error(e);
     }
   }

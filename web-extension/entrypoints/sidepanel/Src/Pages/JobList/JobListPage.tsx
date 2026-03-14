@@ -24,18 +24,21 @@ export function JobListPage() {
     return () => {
       browser.storage.onChanged.removeListener(handleStorageChange);
     };
-  }, []);
+  }, [jobStorage]);
 
   return (
     <>
       {jobList?.map((job, index) => (
-        <JobCard
-          index={index}
-          url={job.url}
-          createdAt={job.createdAt}
-          title={job.jobTitle}
-          company={job.company}
-        ></JobCard>
+        <div key={index}>
+          <JobCard
+            index={index}
+            url={job.url}
+            createdAt={job.createdAt}
+            title={job.jobTitle}
+            company={job.company}
+          ></JobCard>
+          <br></br>
+        </div>
       ))}
     </>
   );
