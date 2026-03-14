@@ -1,19 +1,24 @@
-export interface JobCardInfo {
+export interface JobCardProps {
+  index: number;
   title: string;
+  company: string;
+  createdAt: Date;
   url: string;
-  dateTime: string;
 }
 
-export function JobCard(info: JobCardInfo) {
+export function JobCard(props: JobCardProps) {
+  const openJobInNewTab = () => {
+    window.open(props.url, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <>
-      <h3>{info.title}</h3>
-      <button>
-        <a target="_blank" rel="norefferer" href={info.url}>
-          Open page
-        </a>
-      </button>
-      <p>{info.dateTime}</p>
+      <h3>
+        [{props.index}] {props.title}
+      </h3>
+      <p>At {props.company}</p>
+      <p>Created At: {props.createdAt.getTime()}</p>
+      <button onClick={openJobInNewTab}>Open Tab</button>
     </>
   );
 }

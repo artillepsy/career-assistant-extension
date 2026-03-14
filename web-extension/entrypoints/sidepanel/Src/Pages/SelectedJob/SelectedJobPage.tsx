@@ -26,11 +26,11 @@ export function SelectedJobPage() {
   }, []);
 
   if (!job) {
-    return <h1>Waiting for data...</h1>;
+    return <h3>Waiting for data...</h3>;
   }
 
   if (job.error) {
-    return <h1>{job.error}</h1>;
+    return <h3>{job.error}</h3>;
   }
 
   return (

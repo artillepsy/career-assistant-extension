@@ -1,6 +1,6 @@
 export interface JobData {
   url: string;
-  createdAt: string;
+  createdAt: Date;
   jobTitle: string;
   company: string;
   predictedSalary: string | undefined;
