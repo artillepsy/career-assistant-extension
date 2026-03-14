@@ -1,16 +1,13 @@
 import { JobData } from '@/src/data/job-data.ts';
+import { JobStorageContext } from '@/entrypoints/sidepanel/App.tsx';
 
 export function SelectedJobPage() {
   const [job, setJob] = useState<JobData>();
+  const jobStorage = useContext(JobStorageContext);
 
   useEffect(() => {
     const fetchData = async () => {
-      await browser.storage.local.get('selectedJob').then((result) => {
-        if (result.selectedJob) {
-          // @ts-ignore
-          setJob(result.selectedJob ?? 'failed to get the key');
-        }
-      });
+      setJob(await jobStorage?.getSelectedJob());
     };
 
     const handleStorageChange = (changes: Record<string, any>, areaName: string) => {
@@ -38,7 +35,9 @@ export function SelectedJobPage() {
 
   return (
     <>
-      <a>{job.url}</a>
+      <a target="_blank" rel="norefferer" href={job.url}>
+        Open page
+      </a>
       <h2>{job.jobTitle}</h2>
       <p>At {job.company}</p>
       <br />

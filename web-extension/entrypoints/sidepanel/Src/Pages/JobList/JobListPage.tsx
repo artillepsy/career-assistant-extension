@@ -1,7 +1,9 @@
+import { JobData } from '@/src/data/job-data.ts';
+
 export function JobListPage() {
-  return (
-    <>
-      <h1>Main page placeholder</h1>
-    </>
-  );
+  const [jobs, setJobs] = useState<JobData[]>();
+
+  useEffect(() => {}, []);
+
+  return <>{}</>;
 }

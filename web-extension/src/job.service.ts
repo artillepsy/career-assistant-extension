@@ -30,6 +30,7 @@ export class JobService {
 
     let responseDto = JSON.parse(await response.text()) as ApiJobResponse;
     responseDto.response.url = pageUrl;
+    responseDto.response.createdAt = new Date().toString();
     return responseDto;
   }
 }

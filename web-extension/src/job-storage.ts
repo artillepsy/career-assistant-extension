@@ -1,6 +1,6 @@
 import { JobData } from '@/src/data/job-data.ts';
 
-export class BrowserStorage {
+export class JobStorage {
   public async saveJob(job: JobData | undefined, isSelected: boolean): Promise<void> {
     if (!job) {
       console.error("Can't save job. Object is undefined");
@@ -27,5 +27,19 @@ export class BrowserStorage {
     }
 
     await browser.storage.local.set({ selectedJob: job });
+  }
+
+  public async getJobList(): Promise<JobData[]> {
+    const result = await browser.storage.local.get({ jobList: [] });
+    const jobList = result.jobList as JobData[];
+
+    return jobList;
+  }
+
+  public async getSelectedJob(): Promise<JobData> {
+    const result = await browser.storage.local.get('selectedJob');
+    const job = result.selectedJob as JobData;
+
+    return job;
   }
 }

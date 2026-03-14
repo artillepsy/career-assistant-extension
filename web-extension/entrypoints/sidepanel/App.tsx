@@ -1,39 +1,35 @@
-import { JSX, useState } from 'react';
+import { createContext, JSX, useState } from 'react';
 import './App.css';
 import { PageTab } from '@/entrypoints/sidepanel/Src/Tab/PageTab.tsx';
 import { JobListPage } from '@/entrypoints/sidepanel/Src/Pages/JobList/JobListPage.tsx';
 import { SelectedJobPage } from '@/entrypoints/sidepanel/Src/Pages/SelectedJob/SelectedJobPage.tsx';
+import { JobStorage } from '@/src/job-storage.ts';
+
+export interface PageData {
+  id: number;
+  name: string;
+  comp: JSX.Element;
+}
+
+export const pages: PageData[] = [
+  { id: 1, name: 'List', comp: <JobListPage /> },
+  { id: 2, name: 'Selected', comp: <SelectedJobPage /> },
+];
+
+export const JobStorageContext = createContext<JobStorage | null>(null);
 
 function App() {
-  const pageDataList: PageData[] = [
-    { id: 1, name: 'List', page: <JobListPage /> },
-    { id: 2, name: 'Selected', page: <SelectedJobPage /> },
-  ];
-
-  const [activePageName, setActivePageName] = useState(pageDataList[0].name);
-
-  interface PageData {
-    id: number;
-    name: string;
-    page: JSX.Element;
-  }
+  const [activePageName, setActivePageName] = useState(pages[0].name);
+  const [jobStorage] = useState(() => new JobStorage());
 
   const getActivePage = () => {
-    let elem = pageDataList.find((data) => {
-      return data.name === activePageName;
-    });
-
-    if (elem == null) {
-      throw new Error(`Can't find active page with name ${activePageName}`);
-    }
-
-    return elem?.page;
+    return pages.find((tab) => tab.name === activePageName)?.comp;
   };
 
   return (
-    <>
+    <JobStorageContext.Provider value={jobStorage}>
       <div className="tabs">
-        {pageDataList.map((pageData) => (
+        {pages.map((pageData) => (
           <PageTab
             key={pageData.id}
             name={pageData.name}
@@ -43,7 +39,7 @@ function App() {
         ))}
       </div>
       <div className="mainPage">{getActivePage()}</div>
-    </>
+    </JobStorageContext.Provider>
   );
 }
 
