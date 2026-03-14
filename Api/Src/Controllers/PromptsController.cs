@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Google.GenAI;
+using Google.GenAI.Types;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -38,27 +39,35 @@ public class PromptsController : ControllerBase
 		}
 		
 		var prompt = _geminiProvider.PromptStart + dto.PageText;
-		
 		var startTime = DateTime.Now;
-		
 		var client = new Client(apiKey: _geminiProvider.ApiKey);
-		var response = await client.Models.GenerateContentAsync(
-			model: _geminiProvider.Model,
-			contents: prompt, 
-			config: _geminiProvider.Config);
+
+		GenerateContentResponse response;
+
+		try
+		{
+			response = await client.Models.GenerateContentAsync(
+				model: _geminiProvider.Model,
+				contents: prompt,
+				config: _geminiProvider.Config);
+		}
+		catch (Exception e)
+		{
+			return Problem(detail: e.Message);
+		}
+		
 		
 		var timeTaken = DateTime.Now - startTime;
-
-		var jsonResponse = response.Candidates[0].Content.Parts[0].Text;
+		var str = response.Candidates[0].Content.Parts[0].Text;
 		
-		_logger.LogInformation(jsonResponse);
+		_logger.LogInformation(str);
 		
 		return Ok(new
 		{
 			timeTaken = timeTaken.TotalSeconds,
-			characters =  jsonResponse.Length,
+			characters =  str.Length,
 			aiModel = _geminiProvider.Model,
-			response = JsonDocument.Parse(jsonResponse)
+			response = JsonDocument.Parse(str)
 		});
 	}
 }
