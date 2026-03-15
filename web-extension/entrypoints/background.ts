@@ -1,11 +1,10 @@
-import { ExtensionService } from '@/src/extension-service.ts';
-import { JobService } from '@/src/job-service.ts';
-import { JobStorage } from '@/src/job-storage.ts';
+import { ExtensionService } from '@/src/services/extension-service.ts';
+import { Storage } from '@/src/storage/storage.ts';
 
 export default defineBackground(() => {
   console.log('Hello background!', { id: browser.runtime.id });
 
-  const service = new ExtensionService(new JobService(), new JobStorage());
+  const service = new ExtensionService(new Storage());
 
   browser.action.onClicked.addListener(async (tab) => {
     browser.sidePanel.open({ windowId: tab?.windowId });

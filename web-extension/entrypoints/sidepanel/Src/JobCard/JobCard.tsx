@@ -7,7 +7,7 @@ export interface JobCardProps {
 }
 
 export function JobCard(props: JobCardProps) {
-  const openJobInNewTab = () => {
+  const openJobLink = () => {
     window.open(props.url, '_blank', 'noopener,noreferrer');
   };
 
@@ -18,7 +18,8 @@ export function JobCard(props: JobCardProps) {
       </h3>
       <p>At {props.company}</p>
       <p>Created At: {props.createdAt}</p>
-      <button onClick={openJobInNewTab}>Open Tab</button>
+      <button onClick={openJobLink}>Link</button>
+      <button onClick={openJobLink}>Link</button>
     </>
   );
 }

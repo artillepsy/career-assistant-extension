@@ -1,29 +1,24 @@
 import { JobData } from '@/src/data/job-data.ts';
-import { JobStorageContext } from '@/entrypoints/sidepanel/App.tsx';
+import { StorageContext } from '@/entrypoints/sidepanel/App.tsx';
+import { Storage } from '@/src/storage/storage.ts';
 
 export function SelectedJobPage() {
   const [job, setJob] = useState<JobData>();
-  const jobStorage = useContext(JobStorageContext);
+  const storage = useContext(StorageContext);
 
   useEffect(() => {
     const fetchData = async () => {
-      setJob(await jobStorage?.getSelectedJob());
+      setJob(await storage?.getSelectedJob());
     };
 
-    const handleStorageChange = (changes: Record<string, any>, areaName: string) => {
-      if (areaName === 'local' && changes['selectedJob']) {
-        fetchData();
-      }
-    };
-
-    browser.storage.onChanged.addListener(handleStorageChange);
+    storage?.onUpdated.on(Storage.EVENTS.SELECTED_JOB_UPDATED, fetchData);
 
     fetchData();
 
     return () => {
-      browser.storage.onChanged.removeListener(handleStorageChange);
+      storage?.onUpdated.off(Storage.EVENTS.SELECTED_JOB_UPDATED, fetchData);
     };
-  }, [jobStorage]);
+  }, [storage]);
 
   if (!job) {
     return <h3>Waiting for data...</h3>;

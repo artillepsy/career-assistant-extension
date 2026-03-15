@@ -1,30 +1,26 @@
 import { JobData } from '@/src/data/job-data.ts';
-import { JobStorageContext } from '@/entrypoints/sidepanel/App.tsx';
+import { StorageContext } from '@/entrypoints/sidepanel/App.tsx';
 import { JobCard } from '@/entrypoints/sidepanel/Src/JobCard/JobCard.tsx';
+import { Storage } from '@/src/storage/storage.ts';
 
 export function JobListPage() {
   const [jobList, setJobList] = useState<JobData[]>();
-  const jobStorage = useContext(JobStorageContext);
+  const storage = useContext(StorageContext);
 
   useEffect(() => {
+    console.log(`Listening to instance`);
+
     const fetchData = async () => {
-      setJobList(await jobStorage?.getJobList());
+      setJobList(await storage?.getJobList());
     };
 
-    const handleStorageChange = (changes: Record<string, any>, areaName: string) => {
-      if (areaName === 'local' && changes['jobList']) {
-        fetchData();
-      }
-    };
-
-    browser.storage.onChanged.addListener(handleStorageChange);
-
+    storage?.onUpdated.on(Storage.EVENTS.JOB_LIST_UPDATED, fetchData);
     fetchData();
 
     return () => {
-      browser.storage.onChanged.removeListener(handleStorageChange);
+      storage?.onUpdated.off(Storage.EVENTS.JOB_LIST_UPDATED, fetchData);
     };
-  }, [jobStorage]);
+  }, [storage]);
 
   return (
     <>

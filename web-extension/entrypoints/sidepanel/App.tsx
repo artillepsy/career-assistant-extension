@@ -3,32 +3,39 @@ import './App.css';
 import { PageTab } from '@/entrypoints/sidepanel/Src/Tab/PageTab.tsx';
 import { JobListPage } from '@/entrypoints/sidepanel/Src/Pages/JobList/JobListPage.tsx';
 import { SelectedJobPage } from '@/entrypoints/sidepanel/Src/Pages/SelectedJob/SelectedJobPage.tsx';
-import { JobStorage } from '@/src/job-storage.ts';
+import { Storage } from '@/src/storage/storage.ts';
 
-export interface PageData {
+interface PageData {
   id: number;
   name: string;
   comp: JSX.Element;
 }
 
-export const pages: PageData[] = [
+const pages: PageData[] = [
   { id: 1, name: 'List', comp: <JobListPage /> },
   { id: 2, name: 'Selected', comp: <SelectedJobPage /> },
   /* { id: 3, name: 'CV', comp: <SelectedJobPage /> },*/
 ];
 
-export const JobStorageContext = createContext<JobStorage | null>(null);
+const storage = new Storage();
+
+export const StorageContext = createContext<Storage | null>(null);
 
 function App() {
   const [activePageName, setActivePageName] = useState(pages[1].name);
-  const [jobStorage] = useState(() => new JobStorage());
+
+  useEffect(() => {
+    return () => {
+      storage.dispose();
+    };
+  }, [storage]);
 
   const getActivePage = () => {
     return pages.find((tab) => tab.name === activePageName)?.comp;
   };
 
   return (
-    <JobStorageContext.Provider value={jobStorage}>
+    <StorageContext.Provider value={storage}>
       <div className="tabs">
         {pages.map((pageData) => (
           <PageTab
@@ -40,7 +47,7 @@ function App() {
         ))}
       </div>
       <div className="mainPage">{getActivePage()}</div>
-    </JobStorageContext.Provider>
+    </StorageContext.Provider>
   );
 }
 
