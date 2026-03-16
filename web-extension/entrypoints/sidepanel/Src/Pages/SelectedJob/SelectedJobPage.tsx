@@ -1,24 +1,7 @@
-import { JobData } from '@/src/data/job-data.ts';
-import { StorageContext } from '@/entrypoints/sidepanel/App.tsx';
-import { Storage } from '@/src/storage/storage.ts';
+import { useSelectedJob } from '@/entrypoints/sidepanel/Src/Pages/SelectedJob/Hooks/useSelectedJob.tsx';
 
 export function SelectedJobPage() {
-  const [job, setJob] = useState<JobData>();
-  const storage = useContext(StorageContext);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setJob(await storage?.getSelectedJob());
-    };
-
-    storage?.onUpdated.on(Storage.EVENTS.SELECTED_JOB_UPDATED, fetchData);
-
-    fetchData();
-
-    return () => {
-      storage?.onUpdated.off(Storage.EVENTS.SELECTED_JOB_UPDATED, fetchData);
-    };
-  }, [storage]);
+  const job = useSelectedJob();
 
   if (!job) {
     return <h3>Waiting for data...</h3>;

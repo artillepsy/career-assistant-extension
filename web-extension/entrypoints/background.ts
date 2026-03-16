@@ -1,10 +1,10 @@
 import { ExtensionService } from '@/src/services/extension-service.ts';
-import { Storage } from '@/src/storage/storage.ts';
+import { BrowserStorageApi } from '@/src/storage/browser-storage-api.ts';
 
 export default defineBackground(() => {
   console.log('Hello background!', { id: browser.runtime.id });
 
-  const service = new ExtensionService(new Storage());
+  const service = new ExtensionService(new BrowserStorageApi());
 
   browser.action.onClicked.addListener(async (tab) => {
     browser.sidePanel.open({ windowId: tab?.windowId });

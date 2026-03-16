@@ -1,13 +1,13 @@
 import { Browser } from '@wxt-dev/browser';
 import OnClickData = Browser.contextMenus.OnClickData;
 import Tab = Browser.tabs.Tab;
-import { Storage } from '@/src/storage/storage.ts';
+import { BrowserStorageApi } from '@/src/storage/browser-storage-api.ts';
 import { JobResponse } from '@/src/data/job-response.ts';
 
 export class ExtensionService {
-  private storage: Storage;
+  private storage: BrowserStorageApi;
 
-  constructor(storage: Storage) {
+  constructor(storage: BrowserStorageApi) {
     this.storage = storage;
   }
 

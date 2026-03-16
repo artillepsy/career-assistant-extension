@@ -3,51 +3,43 @@ import './App.css';
 import { PageTab } from '@/entrypoints/sidepanel/Src/Tab/PageTab.tsx';
 import { JobListPage } from '@/entrypoints/sidepanel/Src/Pages/JobList/JobListPage.tsx';
 import { SelectedJobPage } from '@/entrypoints/sidepanel/Src/Pages/SelectedJob/SelectedJobPage.tsx';
-import { Storage } from '@/src/storage/storage.ts';
-
-interface PageData {
-  id: number;
-  name: string;
-  comp: JSX.Element;
-}
+import { PageData } from '@/src/data/page-data.ts';
+import { CvPage } from '@/entrypoints/sidepanel/Src/Pages/Cv/CvPage.tsx';
+import { AppContext } from '@/src/context/app-context.ts';
+import { PageTabId } from '@/src/data/page-tab-id.ts';
+import { useActiveTab } from '@/entrypoints/sidepanel/Src/Tab/Hooks/useActiveTab.tsx';
 
 const pages: PageData[] = [
-  { id: 1, name: 'List', comp: <JobListPage /> },
-  { id: 2, name: 'Selected', comp: <SelectedJobPage /> },
-  /* { id: 3, name: 'CV', comp: <SelectedJobPage /> },*/
+  { id: PageTabId.JobList, name: 'List', comp: <JobListPage /> },
+  { id: PageTabId.Selected, name: 'Selected', comp: <SelectedJobPage /> },
+  { id: PageTabId.Cv, name: 'CV', comp: <CvPage /> },
 ];
 
-const storage = new Storage();
-
-export const StorageContext = createContext<Storage | null>(null);
+export const AppGlobalContext = createContext<AppContext | null>(null);
 
 function App() {
-  const [activePageName, setActivePageName] = useState(pages[1].name);
+  const [appContext] = useState(() => new AppContext());
+  const activeTabId = useActiveTab(appContext);
 
   useEffect(() => {
     return () => {
-      storage.dispose();
+      appContext.dispose();
     };
-  }, [storage]);
+  }, [appContext]);
 
   const getActivePage = () => {
-    return pages.find((tab) => tab.name === activePageName)?.comp;
+    return pages.find((pageTab) => pageTab.id === activeTabId)?.comp;
   };
 
   return (
-    <StorageContext.Provider value={storage}>
+    <AppGlobalContext.Provider value={appContext}>
       <div className="tabs">
         {pages.map((pageData) => (
-          <PageTab
-            key={pageData.id}
-            name={pageData.name}
-            isActive={activePageName === pageData.name}
-            onSelect={setActivePageName}
-          />
+          <PageTab key={pageData.id} id={pageData.id} name={pageData.name} isActive={activeTabId === pageData.id} />
         ))}
       </div>
       <div className="mainPage">{getActivePage()}</div>
-    </StorageContext.Provider>
+    </AppGlobalContext.Provider>
   );
 }
 
