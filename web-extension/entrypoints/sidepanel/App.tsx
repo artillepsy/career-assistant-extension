@@ -3,11 +3,16 @@ import './App.css';
 import { PageTab } from '@/entrypoints/sidepanel/Src/Tab/PageTab.tsx';
 import { JobListPage } from '@/entrypoints/sidepanel/Src/Pages/JobList/JobListPage.tsx';
 import { SelectedJobPage } from '@/entrypoints/sidepanel/Src/Pages/SelectedJob/SelectedJobPage.tsx';
-import { PageData } from '@/src/data/page-data.ts';
 import { CvPage } from '@/entrypoints/sidepanel/Src/Pages/Cv/CvPage.tsx';
 import { AppContext } from '@/src/context/app-context.ts';
 import { PageTabId } from '@/src/data/page-tab-id.ts';
 import { useActiveTab } from '@/entrypoints/sidepanel/Src/Tab/Hooks/useActiveTab.tsx';
+
+interface PageData {
+  id: PageTabId;
+  name: string;
+  comp: JSX.Element;
+}
 
 const pages: PageData[] = [
   { id: PageTabId.JobList, name: 'List', comp: <JobListPage /> },

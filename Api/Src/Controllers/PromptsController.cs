@@ -30,8 +30,8 @@ public class PromptsController : ControllerBase
 		_logger = logger;
 	}
 	
-	[HttpPost("generate")]
-	public async Task<ActionResult> Generate([FromBody] PromptDto dto)
+	[HttpPost("analyze-job")]
+	public async Task<ActionResult> AnalyzeJob([FromBody] PromptDto dto)
 	{
 		if (string.IsNullOrEmpty(dto.PageText))
 		{
@@ -56,18 +56,17 @@ public class PromptsController : ControllerBase
 			return Problem(detail: e.Message);
 		}
 		
-		
 		var timeTaken = DateTime.Now - startTime;
-		var str = response.Candidates[0].Content.Parts[0].Text;
+		var analysis = response.Candidates[0].Content.Parts[0].Text;
 		
-		_logger.LogInformation(str);
+		_logger.LogInformation(analysis);
 		
 		return Ok(new
 		{
 			timeTaken = timeTaken.TotalSeconds,
-			characters =  str.Length,
+			characters =  analysis.Length,
 			aiModel = _geminiProvider.Model,
-			response = JsonDocument.Parse(str)
+			analysis = JsonDocument.Parse(analysis)
 		});
 	}
 }

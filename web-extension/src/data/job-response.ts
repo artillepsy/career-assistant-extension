@@ -4,5 +4,5 @@ export interface JobResponse {
   timeTaken: number;
   characters: number;
   aiModel: string;
-  response: JobData;
+  analysis: JobData;
 }

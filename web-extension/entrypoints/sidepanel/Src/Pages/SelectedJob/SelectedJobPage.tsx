@@ -7,10 +7,6 @@ export function SelectedJobPage() {
     return <h3>Waiting for data...</h3>;
   }
 
-  if (job.error) {
-    return <h3>{job.error}</h3>;
-  }
-
   return (
     <>
       <a target="_blank" rel="norefferer" href={job.url}>

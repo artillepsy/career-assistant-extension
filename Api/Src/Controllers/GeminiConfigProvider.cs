@@ -58,6 +58,7 @@ public class GeminiConfigProvider : IGeminiConfigProvider
 					["jobTitle"] = new Schema() {Type = Type.String},
 					["company"] = new Schema() {Type = Type.String},
 					["predictedSalary"] = new Schema() {Type = Type.String},
+					["predictionConfidence"] = new Schema() {Type = Type.Number},
 					["requiredSkills"] = new Schema()
 					{
 						Type = Type.Array,

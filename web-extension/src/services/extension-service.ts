@@ -40,7 +40,7 @@ export class ExtensionService {
 
     try {
       const apiJobResponse = await this.analyzeJob(info.pageUrl, pagePlainText);
-      await this.storage.saveJob(apiJobResponse.response, true);
+      await this.storage.saveJob(apiJobResponse.analysis, true);
     } catch (e) {
       alert(String(e));
       console.error(e);
@@ -76,8 +76,8 @@ export class ExtensionService {
     }
 
     let responseDto = JSON.parse(await response.text()) as JobResponse;
-    responseDto.response.url = pageUrl;
-    responseDto.response.createdAt = new Date().toLocaleTimeString();
+    responseDto.analysis.url = pageUrl;
+    responseDto.analysis.createdAt = new Date().toLocaleTimeString();
     return responseDto;
   }
 }
