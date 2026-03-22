@@ -11,12 +11,12 @@ namespace Api.Controllers;
 //[Authorize] 
 [ApiController]
 [Route("[controller]")]
-public class PromptsController : ControllerBase
+public class AnalysisController : ControllerBase
 {
-	private readonly ILogger<PromptsController> _logger;
+	private readonly ILogger<AnalysisController> _logger;
 	private readonly IGeminiConfigProvider _geminiProvider;
 	
-	public class PromptDto
+	public class JobAnalysisDto
 	{
 		[JsonProperty("pageText")]
 		public string PageText { get; set; } = string.Empty;
@@ -24,18 +24,18 @@ public class PromptsController : ControllerBase
 		public string Cv { get; set; } = string.Empty;
 	}
 
-	public PromptsController(IGeminiConfigProvider geminiProvider, ILogger<PromptsController> logger)
+	public AnalysisController(IGeminiConfigProvider geminiProvider, ILogger<AnalysisController> logger)
 	{
 		_geminiProvider = geminiProvider;
 		_logger = logger;
 	}
 	
-	[HttpPost("analyze-job")]
-	public async Task<ActionResult> AnalyzeJob([FromBody] PromptDto dto)
+	[HttpPost("job")]
+	public async Task<ActionResult> AnalyzeJob([FromBody] JobAnalysisDto dto)
 	{
 		if (string.IsNullOrEmpty(dto.PageText))
 		{
-			return BadRequest("Property [PageText] is empty");
+			return BadRequest("Property [pageText] is empty");
 		}
 		
 		var prompt = _geminiProvider.PromptStart + dto.PageText;
