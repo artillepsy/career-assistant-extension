@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.SetupAppDbContext();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
 
 builder.Services.AddAuthorization();
@@ -12,7 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.SetupSwaggerBehaviour();
+builder.Services.SetupSwaggerAuthentication();
 
 builder.Services.AddScoped<IGeminiConfigProvider, GeminiConfigProvider>();
 
