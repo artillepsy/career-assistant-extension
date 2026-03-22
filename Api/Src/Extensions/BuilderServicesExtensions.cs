@@ -1,11 +1,13 @@
-
 using Microsoft.OpenApi;
 
 namespace Api.Extensions;
 
 public static class BuilderServicesExtensions
 {
-	public static void SetupSwaggerBehaviour(this IServiceCollection services)
+	/// <summary>
+	/// Custom extension. Adds support of JWT Authentication the swagger view to testing.
+	/// </summary>
+	public static void SetupSwaggerAuthentication(this IServiceCollection services)
 	{
 		services.AddSwaggerGen(options =>
 		{
