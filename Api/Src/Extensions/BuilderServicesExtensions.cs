@@ -2,6 +2,9 @@ using Microsoft.OpenApi;
 
 namespace Api.Extensions;
 
+/// <summary>
+/// Collection of extensions for builder services.
+/// </summary>
 public static class BuilderServicesExtensions
 {
 	/// <summary>

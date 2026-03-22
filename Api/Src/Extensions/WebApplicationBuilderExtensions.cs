@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Api.Extensions;
 
+/// <summary>
+/// Collection of extensions for builder.
+/// </summary>
 public static class WebApplicationBuilderExtensions
 {
 	/// <summary>
