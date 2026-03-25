@@ -1,5 +1,6 @@
 using Api.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Api.Data.Configuration;
@@ -8,10 +9,11 @@ public class PendingUserEntityTypeConfiguration : IEntityTypeConfiguration<Pendi
 {
 	public void Configure(EntityTypeBuilder<PendingUser> builder)
 	{
-		builder.HasIndex(u => u.Id);
 		builder.Property(u => u.Name)
 			.IsRequired()
-			.HasMaxLength(15);
+			.HasMaxLength(50);
+		builder.HasIndex(u => u.Email)
+			.IsUnique();
 		builder.Property(u => u.Email)
 			.IsRequired()
 			.HasMaxLength(254);
@@ -20,6 +22,8 @@ public class PendingUserEntityTypeConfiguration : IEntityTypeConfiguration<Pendi
 			.HasMaxLength(255);
 		builder.Property(u => u.CreatedAt)
 			.IsRequired()
-			.HasDefaultValueSql("now()");
+			.ValueGeneratedOnAdd()
+			.HasDefaultValueSql("now()")
+			.Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Throw);
 	}
 }
