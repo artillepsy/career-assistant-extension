@@ -1,6 +1,9 @@
 using Api.Controllers;
+using Api.Data.Entities;
+using Api.Data.Hashing;
 using Api.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +18,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.SetupSwaggerAuthentication();
 
 builder.Services.AddScoped<IGeminiConfigProvider, GeminiConfigProvider>();
+builder.Services.AddScoped<IPasswordHasher<UserCredentials>, PasswordHasher<UserCredentials>>();
 
 builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
 

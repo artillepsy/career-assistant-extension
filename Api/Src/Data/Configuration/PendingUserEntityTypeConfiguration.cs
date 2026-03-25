@@ -11,13 +11,13 @@ public class PendingUserEntityTypeConfiguration : IEntityTypeConfiguration<Pendi
 	{
 		builder.Property(u => u.Name)
 			.IsRequired()
-			.HasMaxLength(50);
+			.HasMaxLength(20);
 		builder.HasIndex(u => u.Email)
 			.IsUnique();
 		builder.Property(u => u.Email)
 			.IsRequired()
 			.HasMaxLength(254);
-		builder.Property(u => u.Password)
+		builder.Property(u => u.PasswordHash)
 			.IsRequired()
 			.HasMaxLength(255);
 		builder.Property(u => u.CreatedAt)

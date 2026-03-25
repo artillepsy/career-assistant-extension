@@ -10,7 +10,7 @@ namespace Api.Controllers;
 //todo: skip authorize for tests now
 //[Authorize] 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class AnalysisController : ControllerBase
 {
 	private readonly ILogger<AnalysisController> _logger;
@@ -30,7 +30,7 @@ public class AnalysisController : ControllerBase
 		_logger = logger;
 	}
 	
-	[HttpPost("job")]
+	[HttpPost("analyze-job")]
 	public async Task<ActionResult> AnalyzeJob([FromBody] JobAnalysisDto dto)
 	{
 		if (string.IsNullOrEmpty(dto.PageText))
