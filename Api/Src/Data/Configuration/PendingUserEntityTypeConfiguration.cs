@@ -23,7 +23,7 @@ public class PendingUserEntityTypeConfiguration : IEntityTypeConfiguration<Pendi
 		builder.Property(u => u.CreatedAt)
 			.IsRequired()
 			.ValueGeneratedOnAdd()
-			.HasDefaultValueSql("now()")
+			.HasDefaultValueSql("CURRENT_TIMESTAMP")
 			.Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Throw);
 	}
 }
