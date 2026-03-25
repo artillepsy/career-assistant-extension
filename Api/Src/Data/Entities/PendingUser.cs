@@ -1,5 +1,9 @@
+using Api.Data.Configuration;
+using Microsoft.EntityFrameworkCore;
+
 namespace Api.Data.Entities;
 
+[EntityTypeConfiguration(typeof(PendingUserEntityTypeConfiguration))]
 public class PendingUser
 {
 	public int Id { get; set; }

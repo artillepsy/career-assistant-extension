@@ -15,6 +15,11 @@ public static class WebApplicationBuilderExtensions
 	{
 		var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
 		                       throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-		builder.Services.AddDbContext<AppDbContext>(opt => opt.UseNpgsql(connectionString));
+		
+		builder.Services.AddDbContext<AppDbContext>(opt =>
+		{
+			opt.UseNpgsql(connectionString)
+				.UseSnakeCaseNamingConvention();
+		});
 	}
 }
