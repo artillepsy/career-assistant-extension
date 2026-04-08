@@ -15,9 +15,9 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
 			.IsUnique();
 		builder.Property(u => u.Email)
 			.IsRequired()
-			.HasMaxLength(254);
+			.HasMaxLength(254); // technical limit of the email
 		builder.Property(u => u.PasswordHash)
 			.IsRequired()
-			.HasMaxLength(255);
+			.HasMaxLength(128);
 	}
 }

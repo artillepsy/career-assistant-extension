@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using Api.Data;
 using Api.Data.Entities;
-using Api.Data.Hashing;
-using Microsoft.AspNetCore.Identity;
+using Api.Services.Password;
+using Api.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,14 +13,11 @@ namespace Api.Controllers.Users;
 [Route("api/[controller]")]
 public class UserController(
 	AppDbContext dbContext, 
-	IPasswordHasher<UserCredentials> passwordHasher, 
+	PasswordService passwordService, 
+	IVerificationService verificationService, 
 	ILogger<UserController> logger) : ControllerBase
 {
-	private readonly AppDbContext _dbContext = dbContext;
-	private readonly IPasswordHasher<UserCredentials> _passwordHasher = passwordHasher;
-	private readonly ILogger<UserController> _logger = logger;
-
-	public class RequestVerificationDto
+	public class RequestVerificationCodeDto
 	{
 		[Required(AllowEmptyStrings = false)]
 		[StringLength(20, MinimumLength = 3)]
@@ -36,10 +33,32 @@ public class UserController(
 		[StringLength(50, MinimumLength = 8)]
 		public string Password { get; set; }
 	}
+
+	public class VerificationDto
+	{
+		[Required(AllowEmptyStrings = false)]
+		[StringLength(20, MinimumLength = 3)]
+		[RegularExpression(@"^[a-zA-Z0-9_]+$")]
+		public string Name { get; set; }
+		
+		[EmailAddress]
+		[Required(AllowEmptyStrings = false)]
+		[StringLength(254, MinimumLength = 6)]
+		public string Email { get; set; }
+		
+		[Required(AllowEmptyStrings = false)]
+		[StringLength(50, MinimumLength = 8)]
+		public string Password { get; set; }
+		
+		[StringLength(6, MinimumLength = 6)]
+		[Required(AllowEmptyStrings = false)]
+		
+		public string Code { get; set; }
+	}
 		
 	//todo: check a case when user already exists and they request a code again
 	[HttpPost("request-verification-code")]
-	public async Task<ActionResult> RequestVerificationCode([FromBody] RequestVerificationDto dto)
+	public async Task<ActionResult> RequestVerificationCode([FromBody] RequestVerificationCodeDto dto)
 	{
 		if (!ModelState.IsValid)
 		{
@@ -47,33 +66,41 @@ public class UserController(
 		}
 		
 		var emailFormatted = dto.Email.ToLowerInvariant();
+		var hashedPassword = passwordService.Hash(dto.Password);
 		
-		var exists = await _dbContext.PendingUsers.AnyAsync(u => u.Email.Equals(emailFormatted));
-		if (exists)
+		var exists = await dbContext.PendingUsers.AnyAsync(u => u.Email.Equals(emailFormatted));
+		
+		if (exists) // well, if exists, the new code will be generated and sent to email then. To fix it
 		{
 			return Conflict("User with same email already exists");
 		}
 
-		var credentials = new UserCredentials() { Email = emailFormatted, Password = dto.Password };
-		var hashedPassword = _passwordHasher.HashPassword(credentials, dto.Password);
+		var verificationCode = verificationService.GenerateCode();
 		
 		try
 		{
-			await _dbContext.PendingUsers.AddAsync(new PendingUser()
+			await dbContext.PendingUsers.AddAsync(new PendingUser()
 			{
 				Name = dto.Name,
 				Email = emailFormatted,
-				PasswordHash = hashedPassword
+				PasswordHash = hashedPassword,
+				// store hashcode instead of raw value for security
+				VerificationCodeHash = verificationService.HashCode(verificationCode),
+				LastModifiedAt = DateTimeOffset.UtcNow,
+				ExpiresAt = DateTimeOffset.UtcNow + TimeSpan.FromMinutes(15)
 			});
 
-			await _dbContext.SaveChangesAsync();
+			await dbContext.SaveChangesAsync();
 		}
 		catch (Exception e)
 		{
-			_logger.LogError(e.ToString());
+			logger.LogError(e.ToString());
 			return Problem("Internal server error.");
 		}
+		// todo: sent an email with the code. Locally - through a designed email address for that. In prod - use AWS SES.
+		// basically, it's better to use email  service
 
+		logger.LogInformation($"Verification code is stored and sent to email. Code: {verificationCode}");
 		return Ok("Verification code is sent to your email!");
 	}
 }

@@ -1,15 +1,15 @@
 using Api.Controllers;
-using Api.Data.Entities;
-using Api.Data.Hashing;
 using Api.Extensions;
+using Api.Services.Email;
+using Api.Services.Password;
+using Api.Services.Verification;
+using Api.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.SetupAppDbContext();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
-
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
@@ -18,7 +18,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.SetupSwaggerAuthentication();
 
 builder.Services.AddScoped<IGeminiConfigProvider, GeminiConfigProvider>();
-builder.Services.AddScoped<IPasswordHasher<UserCredentials>, PasswordHasher<UserCredentials>>();
+builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<IVerificationService, VerificationService>();
+builder.Services.AddScoped<IEmailService, EmailDevService>();
+
 
 builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
 
