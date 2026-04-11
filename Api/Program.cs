@@ -1,7 +1,7 @@
 using Api.Controllers;
 using Api.Controllers.Users;
 using Api.Extensions;
-using Api.Services.Email;
+using Api.Services.Mail;
 using Api.Services.Password;
 using Api.Services.Verification;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -20,9 +20,10 @@ builder.Services.SetupSwaggerAuthentication();
 builder.Services.AddScoped<IGeminiConfigProvider, GeminiConfigProvider>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IVerifService, VerifService>();
-builder.Services.AddScoped<IEmailService, EmailDevService>();
+builder.Services.AddScoped<IMailService, DevMailService>();
 
 builder.Services.Configure<VerifOptions>(builder.Configuration.GetSection("UserVerification"));
+builder.Services.Configure<DevMailOptions>(builder.Configuration.GetSection("DevMail"));
 
 builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
 

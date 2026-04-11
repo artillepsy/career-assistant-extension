@@ -1,7 +1,7 @@
 using Api.Services.Verification;
 using Xunit.Abstractions;
 
-namespace Api.UnitTests.Utils;
+namespace Api.UnitTests.Services.Verification;
 
 public class VerifServiceTests(ITestOutputHelper testOutputHelper)
 {
