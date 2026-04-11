@@ -1,5 +1,6 @@
 using Api.Data;
 using Api.Data.Entities;
+using Api.Services.Mail;
 using Api.Services.Password;
 using Api.Services.Verification;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ namespace Api.Controllers.Users;
 [Route("api/[controller]")]
 public class UserController(
 	AppDbContext dbContext,
+	IMailService mailService,
 	IPasswordHasher passwordHasher,
 	IVerifService verifService,
 	IOptions<VerifOptions> options,
@@ -74,7 +76,17 @@ public class UserController(
 		}
 
 		// todo: send an email with the code. Locally - through a designed email address for that. In prod - use AWS SES.
+		var result = await mailService.Send(
+			dto.Email, 
+			dto.Name,
+			"Verification",
+			verifCode);
 
+		if (!result)
+		{
+			return Accepted("Server error occured while sending the mail. Try again.");
+		}
+		
 		// todo: remove code log from prod
 		logger.LogInformation($"Verification code is stored and sent to email: {dto.Email}. Code: {verifCode}");
 		return Ok("Verification code is sent to your email!");
