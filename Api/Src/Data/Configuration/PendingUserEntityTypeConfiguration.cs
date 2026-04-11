@@ -13,10 +13,10 @@ public class PendingUserEntityTypeConfiguration : IEntityTypeConfiguration<Pendi
 			.HasMaxLength(20);
 		builder.HasIndex(u => u.Email)
 			.IsUnique();
-		builder.Property(u => u.VerificationCodeHash)
-			.IsRequired()
-			.HasColumnName("binary(32)") // since this field stores the hash, binary(32) type is used.
-			.IsFixedLength();
+		builder.Property(u => u.VerificationCode)
+			.IsRequired();
+		builder.Property(u => u.VerifyAttemptsLeft)
+			.IsRequired();
 		builder.Property(u => u.Email)
 			.IsRequired()
 			.HasMaxLength(254); // the technical length limit of email

@@ -10,7 +10,8 @@ public class PendingUser
 	public string Name { get; set; }
 	public string Email { get; set; }
 	public string PasswordHash { get; set; }
-	public byte[] VerificationCodeHash { get; set; }
+	public string VerificationCode { get; set; }
+	public int VerifyAttemptsLeft { get; set; }
 	public DateTimeOffset LastModifiedAt { get; set; }
 	public DateTimeOffset ExpiresAt { get; set; }
 }
